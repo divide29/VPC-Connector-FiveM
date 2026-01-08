@@ -22,7 +22,6 @@ function spamerrorabove()
   print("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑")
 end
 
---ICH PRINTE HIER WAS IN DIE SERVER KONSOLE WARUM ZUM FICK TAUCHT DAS IN MEINEM CLIENT AUF ABER NICHT IN DER SERVER KONSOLe
  for k,v in pairs(Config) do
   if type(v) == "string" then
       if v == "nil" or v == "nill" then
