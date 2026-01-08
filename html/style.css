@@ -1,0 +1,172 @@
+* { box-sizing: border-box; }
+
+body {
+    font-family: sans-serif;
+    overflow: hidden;
+    max-height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    user-select: none;
+}
+
+.tab {
+    position: relative;
+    min-height:100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#copnet .iframe {
+    position: relative;
+    width: 1471px;
+    flex: 0.92;
+    background:black;
+    margin-top: 48px;
+    margin-left: 192px;
+    padding: 0;
+    border-radius: 6px;
+    overflow: scroll;
+    border: none;
+    user-select: none;
+}
+
+   
+#copnet {
+    visibility: hidden;
+    flex: 1;
+    top: 20px;
+    bottom: 20px;
+    display: flex;
+}
+
+
+
+
+
+
+@media only screen and (max-device-width: 1280px) and (max-device-height: 720px) {
+    #copnet .iframe {
+        flex: 0.67;
+    }
+}
+
+
+@media only screen and (max-device-width: 1600px) and (max-device-height: 900px) {
+
+    #copnet .iframe {
+        
+        width: 1225px !important;
+        margin-left: 155px !important;
+        
+    }
+    #vpctab-wrap-copnet {
+        background: url('tablet-s.png') !important;
+        background-repeat: no-repeat;
+    }
+}
+
+
+
+
+@media only screen and (min-device-width: 1920px) and (min-device-height: 1080px) {
+    #copnet .iframe {
+        flex: 0.92;
+    }
+}
+
+@media only screen and (min-device-width: 2560px) and (min-device-height: 1440px) {
+    #copnet .iframe {
+        flex: 0.67;
+    }
+
+    #copnet #vpctab-wrap-copnet .dot {
+        bottom: 1415px !important;
+        left: -860px !important;
+    }
+
+    #copnet #vpctab-wrap-copnet .dot#off {
+        margin-left: 51.75% !important;
+    }
+
+}
+
+@media only screen and (min-device-width: 3840px) and (min-device-height: 2160px) {
+    #copnet .iframe {
+        flex: 0.435;
+    }
+
+
+    #copnet #vpctab-wrap-copnet .dot {
+        bottom: 2135px !important;
+        left: -1600px !important;
+    }
+
+    #copnet #vpctab-wrap-copnet .dot#off {
+        margin-left: 53.75% !important;
+    }
+
+}
+
+@media only screen and (max-device-width: 1360px) and (max-device-height: 768px) {
+    #copnet .iframe {
+		width: 1045px !important;
+		flex: 0.925;
+		margin-left: 125px !important;
+		margin-top: 25px !important;
+        
+    }
+	
+	#vpctab-wrap-copnet {
+		background: url('tablet-us.png') !important;
+		background-repeat: no-repeat !important;
+		
+	}
+		
+	
+}
+
+
+#vpctab-wrap-copnet {
+    background: url('tablet.png');
+    background-repeat: no-repeat;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 95%;
+    margin: 0 auto 0;
+    padding: 30px;
+    border-radius: 30px;
+    transition: transform 0.75s ease, box-shadow 0.75s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+
+#copnet #vpctab-wrap-copnet .dot { 
+    position: absolute;
+    width: 75px;
+    height: 10px;
+    border-radius: 100px;
+    bottom: 1055px;
+    left: -495px;
+    transition: all 0.5s ease;
+}
+
+#copnet #vpctab-wrap-copnet .dot:hover {
+    background: rgb(51, 51, 51);
+}
+
+#copnet #vpctab-wrap-copnet .dot#off { 
+    margin-left: 50%;
+    width: 75px;
+}
+
+#copnet #vpctab-wrap-copnet .dot#reset { 
+    margin-left: 57.4%;
+    width: 140px;
+}
+
+
+
