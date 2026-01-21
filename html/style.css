@@ -1,4 +1,6 @@
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     font-family: sans-serif;
@@ -13,7 +15,7 @@ body {
 
 .tab {
     position: relative;
-    min-height:100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -22,7 +24,7 @@ body {
     position: relative;
     width: 1471px;
     flex: 0.92;
-    background:black;
+    background: black;
     margin-top: 48px;
     margin-left: 192px;
     padding: 0;
@@ -32,7 +34,7 @@ body {
     user-select: none;
 }
 
-   
+
 #copnet {
     visibility: hidden;
     flex: 1;
@@ -56,11 +58,12 @@ body {
 @media only screen and (max-device-width: 1600px) and (max-device-height: 900px) {
 
     #copnet .iframe {
-        
+
         width: 1225px !important;
         margin-left: 155px !important;
-        
+
     }
+
     #vpctab-wrap-copnet {
         background: url('tablet-s.png') !important;
         background-repeat: no-repeat;
@@ -111,20 +114,20 @@ body {
 
 @media only screen and (max-device-width: 1360px) and (max-device-height: 768px) {
     #copnet .iframe {
-		width: 1045px !important;
-		flex: 0.925;
-		margin-left: 125px !important;
-		margin-top: 25px !important;
-        
+        width: 1045px !important;
+        flex: 0.925;
+        margin-left: 125px !important;
+        margin-top: 25px !important;
+
     }
-	
-	#vpctab-wrap-copnet {
-		background: url('tablet-us.png') !important;
-		background-repeat: no-repeat !important;
-		
-	}
-		
-	
+
+    #vpctab-wrap-copnet {
+        background: url('tablet-us.png') !important;
+        background-repeat: no-repeat !important;
+
+    }
+
+
 }
 
 
@@ -144,7 +147,7 @@ body {
 }
 
 
-#copnet #vpctab-wrap-copnet .dot { 
+#copnet #vpctab-wrap-copnet .dot {
     position: absolute;
     width: 75px;
     height: 10px;
@@ -158,15 +161,12 @@ body {
     background: rgb(51, 51, 51);
 }
 
-#copnet #vpctab-wrap-copnet .dot#off { 
+#copnet #vpctab-wrap-copnet .dot#off {
     margin-left: 50%;
     width: 75px;
 }
 
-#copnet #vpctab-wrap-copnet .dot#reset { 
+#copnet #vpctab-wrap-copnet .dot#reset {
     margin-left: 57.4%;
     width: 140px;
 }
-
-
-
