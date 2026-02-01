@@ -1,0 +1,1 @@
+ALTER TABLE `owned_vehicles` ADD `vpcname` varchar(128) COLLATE utf8mb4_bin DEFAULT NULL;
