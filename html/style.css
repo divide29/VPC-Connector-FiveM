@@ -34,7 +34,6 @@ body {
     user-select: none;
 }
 
-
 #copnet {
     visibility: hidden;
     flex: 1;
@@ -43,35 +42,23 @@ body {
     display: flex;
 }
 
-
-
-
-
-
 @media only screen and (max-device-width: 1280px) and (max-device-height: 720px) {
     #copnet .iframe {
         flex: 0.67;
     }
 }
 
-
 @media only screen and (max-device-width: 1600px) and (max-device-height: 900px) {
-
     #copnet .iframe {
-
         width: 1225px !important;
         margin-left: 155px !important;
-
     }
 
     #vpctab-wrap-copnet {
-        background: url('tablet-s.png') !important;
+        background: url("tablet-s.png") !important;
         background-repeat: no-repeat;
     }
 }
-
-
-
 
 @media only screen and (min-device-width: 1920px) and (min-device-height: 1080px) {
     #copnet .iframe {
@@ -92,14 +79,12 @@ body {
     #copnet #vpctab-wrap-copnet .dot#off {
         margin-left: 51.75% !important;
     }
-
 }
 
 @media only screen and (min-device-width: 3840px) and (min-device-height: 2160px) {
     #copnet .iframe {
         flex: 0.435;
     }
-
 
     #copnet #vpctab-wrap-copnet .dot {
         bottom: 2135px !important;
@@ -109,7 +94,6 @@ body {
     #copnet #vpctab-wrap-copnet .dot#off {
         margin-left: 53.75% !important;
     }
-
 }
 
 @media only screen and (max-device-width: 1360px) and (max-device-height: 768px) {
@@ -118,21 +102,16 @@ body {
         flex: 0.925;
         margin-left: 125px !important;
         margin-top: 25px !important;
-
     }
 
     #vpctab-wrap-copnet {
-        background: url('tablet-us.png') !important;
+        background: url("tablet-us.png") !important;
         background-repeat: no-repeat !important;
-
     }
-
-
 }
 
-
 #vpctab-wrap-copnet {
-    background: url('tablet.png');
+    background: url("tablet.png");
     background-repeat: no-repeat;
     width: 100%;
     max-width: 100%;
@@ -141,11 +120,12 @@ body {
     margin: 0 auto 0;
     padding: 30px;
     border-radius: 30px;
-    transition: transform 0.75s ease, box-shadow 0.75s ease;
+    transition:
+        transform 0.75s ease,
+        box-shadow 0.75s ease;
     display: flex;
     flex-direction: column;
 }
-
 
 #copnet #vpctab-wrap-copnet .dot {
     position: absolute;

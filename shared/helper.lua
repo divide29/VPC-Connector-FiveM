@@ -152,25 +152,65 @@ end
 ---Sets global `ESX` or `QBCore` and returns it.
 ---@return table|nil
 function GetFramework()
-  if SharedConfig == nil or SharedConfig.Framework == nil then
-    Log('ERROR', 'Config.Framework is not set. Please check your config.lua')
+  local framework = tostring(SharedConfig.Framework or ''):upper()
+
+  local function tryResolveEsx()
+    if ESX ~= nil then return ESX end
+
+    if SharedConfig.FrameworkTrigger ~= nil and SharedConfig.FrameworkTrigger ~= '' and
+        GetResourceState(SharedConfig.FrameworkTrigger) == 'started' then
+      local ok, result = pcall(function()
+        return exports[SharedConfig.FrameworkTrigger]:getSharedObject()
+      end)
+      if ok then
+        ESX = result
+        return ESX
+      end
+    end
+
+    if GetResourceState('es_extended') == 'started' then
+      if exports['es_extended'] and exports['es_extended'].getSharedObject then
+        ESX = exports['es_extended']:getSharedObject()
+      else
+        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+      end
+      return ESX
+    end
+
     return nil
   end
 
-  if (SharedConfig.Framework == 'ESX' or SharedConfig.Framework == 'ESX185') and
+  if framework == '' or framework == 'AUTO' then
+    if GetResourceState('qb-core') == 'started' then
+      if QBCore == nil then
+        QBCore = exports['qb-core']:GetCoreObject()
+      end
+      return QBCore
+    end
+
+    local esx = tryResolveEsx()
+    if esx ~= nil then
+      return esx
+    end
+
+    Log('ERROR', 'No supported framework detected.')
+    return nil
+  end
+
+  if (framework == 'ESX' or framework == 'ESX185') and
       (SharedConfig.FrameworkTrigger == nil or SharedConfig.FrameworkTrigger == '') then
     Log('ERROR', 'Config.FrameworkTrigger is not set. Please check your config.lua')
     return nil
   end
 
-  if SharedConfig.Framework == 'QB' then
+  if framework == 'QB' then
     if QBCore == nil then
       QBCore = exports['qb-core']:GetCoreObject()
     end
     return QBCore
   end
 
-  if SharedConfig.Framework == 'ESX' then
+  if framework == 'ESX' then
     if ESX == nil then
       if IsDuplicityVersion() then
         TriggerEvent(SharedConfig.FrameworkTrigger, function(obj) ESX = obj end)
@@ -195,7 +235,7 @@ function GetFramework()
     return ESX
   end
 
-  if SharedConfig.Framework == 'ESX185' then
+  if framework == 'ESX185' then
     if ESX == nil then
       local ok, result = pcall(function()
         return exports[SharedConfig.FrameworkTrigger]:getSharedObject()

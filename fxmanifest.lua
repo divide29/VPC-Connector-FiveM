@@ -7,22 +7,24 @@ description 'A resource to integrate CopNet and other networks from VPC into you
 version '4.0.0'
 
 client_scripts {
-  'shared/config.lua',
   'shared/helper.lua',
-  'shared/target.lua',
+  'client/target.lua',
+  'client/framework.lua',
+  'client/keybinds.lua',
+  'client/livemap.lua',
   'client/client.lua',
-  --'client/api_client.lua',
 }
 
 
 
 server_scripts {
   '@oxmysql/lib/MySQL.lua',
-  'shared/config.lua',
   'shared/helper.lua',
-  --'shared/api_config.lua',
-  --'server/api_server.lua',
+  'server/framework.lua',
+  'server/commands.lua',
+  'server/livemap.lua',
   'server/server.lua',
+  'server/database.lua',
 }
 
 files {

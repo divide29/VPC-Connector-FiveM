@@ -1,336 +1,60 @@
+---******************************************************
+--- Local Variables                                   ***
+---******************************************************
+
+--- The Config object
 local Config = require 'config.shared'
 
-syncactive = false
+--- Is the sync active?
+local syncactive = false
 
-GetFramework()
+EnsureFramework()
 
--- Config Checks:
-Citizen.CreateThread(function()
-  function spamerrorbelow()
-    print("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓")
-    print("↓↓↓↓↓↓ [EN] SOMETHING IS WRONG!! SEE BELOW    ↓↓↓↓↓↓")
-    print("↓↓↓↓↓↓ [EN] SOMETHING IS WRONG!! SEE BELOW    ↓↓↓↓↓↓")
-    print("↓↓↓↓↓↓ [DE] ETWAS STIMMT NICHT!! SIEHE UNTEN  ↓↓↓↓↓↓")
-    print("↓↓↓↓↓↓ [DE] ETWAS STIMMT NICHT!! SIEHE UNTEN  ↓↓↓↓↓↓")
-    print("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓")
+---******************************************************
+--- Callbacks                                         ***
+---******************************************************
+
+lib.callback.register('vpc_connector:cb:getJob', function(source)
+  local player = GetPlayer(source)
+  if player == nil then
+    return "noNET"
   end
 
-  function spamerrorabove()
-    print("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑")
-    print("↑↑↑↑↑↑ [EN] SOMETHING IS WRONG!! SEE ABOVE    ↑↑↑↑↑↑")
-    print("↑↑↑↑↑↑ [EN] SOMETHING IS WRONG!! SEE ABOVE    ↑↑↑↑↑↑")
-    print("↑↑↑↑↑↑ [DE] ETWAS STIMMT NICHT!! SIEHE OBEN   ↑↑↑↑↑↑")
-    print("↑↑↑↑↑↑ [DE] ETWAS STIMMT NICHT!! SIEHE OBEN   ↑↑↑↑↑↑")
-    print("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑")
+  local net = GetNetForJob(GetPlayerJobName(player), GetPlayerJobGrade(player))
+  if net == nil then
+    return "noNET"
   end
 
-  --ICH PRINTE HIER WAS IN DIE SERVER KONSOLE WARUM ZUM FICK TAUCHT DAS IN MEINEM CLIENT AUF ABER NICHT IN DER SERVER KONSOLe
-  for k, v in pairs(Config) do
-    if type(v) == "string" then
-      if v == "nil" or v == "nill" then
-        spamerrorbelow()
-        print('Config: ' ..
-          k ..
-          ' seems wrong. Is "' ..
-          v ..
-          '" really what you should put in there? Please check your config.lua! And Remember always put nil without " " in your config.lua!')
-        spamerrorabove()
-      end
-    end
-  end
-
-  --Framework Check
-  if Config.Framework == "ESX" and Config.FrameworkTrigger == "es_extended" then
-    spamerrorbelow()
-    print(
-      "Config: Framework or FrameworkTrigger seems wrong. Please check your config.lua! Remember: If you set your Fremwork to ESX you need to set your FrameworkTrigger to your Framework Trigger (e.g esx:getSharedObject)!")
-    spamerrorabove()
-  elseif Config.Framework == "ESX185" and Config.FrameworkTrigger == "esx:getSharedObject" then
-    spamerrorbelow()
-    print(
-      "Config: Framework or FrameworkTrigger seems wrong. Please check your config.lua! Remember: If you set your Fremwork to ESX185 you need to set your FrameworkTrigger to your es_extended Ressource Name!")
-    spamerrorabove()
-  end
-
-
-
-
-  --Hotkey Check
-  if Config.OpenTabHotkey ~= nil and Config.OpenCommand == nil then
-    spamerrorbelow()
-    print(
-      "Config: OpenTabHotkey seems wrong. It's not possible to activate the Hotkey without activating the OpenCommand")
-    spamerrorabove()
-  end
-
-  -- Array Check
-  local Arraystocheck = {
-    { name = "Jobs.copnet",   value = Config.Jobs and Config.Jobs.copnet },
-    { name = "Jobs.medicnet", value = Config.Jobs and Config.Jobs.medicnet },
-    { name = "Jobs.carnet",   value = Config.Jobs and Config.Jobs.carnet },
-    { name = "Jobs.firenet",  value = Config.Jobs and Config.Jobs.firenet },
-    { name = "UseableItem",   value = Config.UseableItem }
-  }
-
-  for k, v in pairs(Arraystocheck) do
-    if v.value ~= nil and type(v.value) ~= "table" then
-      spamerrorbelow()
-      print('Config: ' .. v.name .. ' seems wrong. Remember: This needs either to be an array/table or nil without " "!')
-      spamerrorabove()
-    end
-  end
+  return net
 end)
 
+lib.callback.register('vpc_connector:cb:getJobName', function(source)
+  local player = GetPlayer(source)
+  if player == nil then return nil end
+  return GetPlayerJobName(player)
+end)
 
+lib.callback.register('vpc_connector:cb:hasItem', function(source, itemName)
+  return PlayerHasItem(source, itemName)
+end)
 
+lib.callback.register('vpc_connector:cb:getLicense', function(source, target)
+  local targetId = target or source
+  return GetIdentifierByPrefix(targetId, Config.PlayerIdentifier)
+end)
 
-if Config.Framework == "ESX" or Config.Framework == "ESX185" then
-  ESX.RegisterServerCallback('vpc-tab:getjob', function(source, cb)
-    answer = "NOSET"
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local net = GetNetForJob(xPlayer.job.name, GetJobGrade(xPlayer.job))
-    if net ~= nil then
-      answer = net
-    end
+if Config.UseableItem ~= nil then
+  for k, v in pairs(Config.UseableItem) do
+    RegisterUseableItem(v, function(source)
+      local player = GetPlayer(source)
+      if player == nil then return end
 
-    if answer == "NOSET" then
-      answer = "noNET"
-    end
-    cb(answer)
-  end)
-
-  ESX.RegisterServerCallback('vpc-tab:getcount', function(source, cb)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    if xPlayer.getInventoryItem(Config.ItemMap).count >= 1 then
-      cb(true)
-    else
-      cb(false)
-    end
-  end)
-elseif Config.Framework == "QB" then
-  QBCore.Functions.CreateCallback('vpc-tab:getjob', function(source, cb)
-    answer = "NOSET"
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-
-    while Player == nil do Wait(0) end
-    local net = GetNetForJob(Player.PlayerData.job.name, GetJobGrade(Player.PlayerData.job))
-    if net ~= nil then
-      answer = net
-    end
-
-    if answer == "NOSET" then
-      answer = "noNET"
-    end
-
-    cb(answer)
-  end)
-
-
-  QBCore.Functions.CreateCallback('vpc-tab:getcount', function(source, cb)
-    local Player = QBCore.Functions.GetPlayer(source)
-    local HasItem = Player.Functions.GetItemByName(Config.ItemMap)
-    if HasItem ~= nil then
-      cb(true)
-    else
-      cb(false)
-    end
-  end)
-else
-  print("WRONG FRAMEWORK!!")
-end
-
-
-
-
-if Config.Framework == "ESX" or Config.Framework == "ESX185" then
-  ESX.RegisterServerCallback('vpc-tab:getjobName', function(source, cb)
-    local JobName = "NOSET"
-    local xPlayer = ESX.GetPlayerFromId(source)
-    if xPlayer == nil then return end
-    local JobName = xPlayer.job.name
-    cb(JobName)
-  end)
-elseif Config.Framework == "QB" then
-  QBCore.Functions.CreateCallback('vpc-tab:getjobName', function(source, cb)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    if Player == nil then return end
-    local JobName = Player.PlayerData.job.name
-
-    cb(JobName)
-  end)
-end
-
-
-
-
-if Config.Framework == "QB" then
-  QBCore.Functions.CreateCallback('vpc-tab:getItem', function(source, cb)
-    local Player = QBCore.Functions.GetPlayer(source)
-    local HasItem = Player.Functions.GetItemByName(Config.ItemTab)
-    if HasItem ~= nil then
-      cb(true)
-    else
-      cb(false)
-    end
-  end)
-end
-
-
-
-function ItemUseableESX(itemName)
-  ESX.RegisterUsableItem(itemName, function(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local net = GetNetForJob(xPlayer.job.name, GetJobGrade(xPlayer.job))
-    if net ~= nil then
-      TriggerClientEvent('vpc-tab:BOSS', source, net)
-    end
-  end)
-end
-
-function ItemUseableQB(itemName)
-  QBCore.Functions.CreateUseableItem(itemName, function(source, item)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local JobName = Player.PlayerData.job.name
-    local net = GetNetForJob(JobName, GetJobGrade(Player.PlayerData.job))
-    if net ~= nil then
-      TriggerClientEvent('vpc-tab:BOSS', source, net)
-    end
-  end)
-end
-
-if Config.Framework == "ESX" or Config.Framework == "ESX185" then
-  if Config.UseableItem ~= nil then
-    for k, v in pairs(Config.UseableItem) do
-      ItemUseableESX(v)
-    end
+      local net = GetNetForJob(GetPlayerJobName(player), GetPlayerJobGrade(player))
+      if net ~= nil then
+        TriggerClientEvent('vpc_connector:BOSS', source, net)
+      end
+    end)
   end
-elseif Config.Framework == "QB" then
-  if Config.UseableItem ~= nil then
-    for k, v in pairs(Config.UseableItem) do
-      ItemUseableQB(v)
-    end
-  end
-end
-
-
-if Config.LivemapAktive then
-  if Config.IDMap ~= nil then
-    if Config.Framework == "ESX" or Config.Framework == "ESX185" then
-      ESX.RegisterServerCallback('vpc-tab:getlic', function(source, cb)
-        local answer  = nil
-        local steamid = nil
-
-
-
-        for k, v in pairs(GetPlayerIdentifiers(source)) do
-          if string.sub(v, 1, string.len(Config.IDMap)) == Config.IDMap then
-            steamid = v
-            answer = steamid
-          end
-        end
-        --print(answer)
-        cb(answer)
-      end)
-
-
-      ESX.RegisterServerCallback('vpc-tab:getliccommand', function(source, cb, target)
-        local answer  = nil
-        local steamid = nil
-        for k, v in pairs(GetPlayerIdentifiers(target)) do
-          if string.sub(v, 1, string.len(Config.IDMap)) == Config.IDMap then
-            steamid = v
-            answer = steamid
-          end
-        end
-
-
-        cb(answer)
-      end)
-    elseif Config.Framework == "QB" then
-      QBCore.Functions.CreateCallback('vpc-tab:getlic', function(source, cb)
-        local src = source
-        local Player = QBCore.Functions.GetPlayer(src)
-        local answer = nil
-        local fivem = nil
-
-        for k, v in pairs(GetPlayerIdentifiers(source)) do
-          if string.sub(v, 1, string.len(Config.IDMap)) == Config.IDMap then
-            fivem = v
-            answer = fivem
-          end
-        end
-        -- print(answer)
-        cb(answer)
-      end)
-
-      QBCore.Functions.CreateCallback('vpc-tab:getliccommand', function(source, cb, target)
-        local Player = QBCore.Functions.GetPlayer(target)
-        local answer = nil
-        local fivem = nil
-
-        for k, v in pairs(GetPlayerIdentifiers(target)) do
-          if string.sub(v, 1, string.len(Config.IDMap)) == Config.IDMap then
-            fivem = v
-            answer = fivem
-          end
-        end
-
-        cb(answer)
-      end)
-    else
-      print("WRONG FRAMEWORK!!")
-    end
-  else
-    print("NO IDMAP SET!!")
-  end
-
-
-
-
-
-
-
-
-
-  Citizen.CreateThread(function()
-    while true do
-      MySQL.Async.execute("DELETE FROM vpcLS")
-
-      Citizen.Wait(900000)
-    end
-  end)
-
-
-
-
-
-
-
-
-  RegisterServerEvent('vpc:updateCoords')
-  AddEventHandler('vpc:updateCoords', function(plID, coord, statusa, network)
-    coordx = coord.x
-    coordy = coord.y
-
-    MySQL.Async.execute("UPDATE vpcLS SET coordsx = ?, coordsy = ?, NET = ? WHERE playerId = ?",
-      { coordx, coordy, network, plID },
-      function(rowsChanged)
-        if rowsChanged == 0 then
-          MySQL.Async.execute("INSERT INTO vpcLS (playerId, coordsx, coordsy, NET) VALUES (?, ?, ?, ?)",
-            { plID, coordx, coordy, network })
-        end
-      end)
-  end)
-
-
-
-  RegisterServerEvent('vpc:offDuty')
-  AddEventHandler('vpc:offDuty', function(plID, statusa)
-    MySQL.Async.execute("DELETE FROM vpcLS WHERE playerId = ?", { plID })
-  end)
 end
 
 
@@ -366,72 +90,3 @@ if Config.VehicleName == true then
     MySQL.Async.execute("UPDATE owned_vehicles SET vpcname = ? WHERE plate = ?", { updatevehicledata, plate })
   end)
 end
-
---[[
-
-if Config.PayModule then
-  RegisterServerEvent('vpc:setVehicleData')
-  AddEventHandler('vpc:setVehicleData', function()
-    checknewpays()
-  end)
-
-  Citizen.CreateThread(function()
-    while true do
-      Citizen.Wait(10000)
-      checknewpays()
-    end
-  end)
-
-
-
-
-  function checknewpays()
-    MySQL.Async.fetchAll("SELECT * FROM vpc_invoice WHERE status LIKE 'new'", function(resultPay)
-      datiPay = resultPay
-    end)
-
-    while datiPay == nil do Citizen.Wait(0) end
-
-    for k,v in pairs(datiPay) do
-      transmitPay = false
-      targetPayId = v.id
-      targetPayPcId = v.pcid
-      targetPayPcName = v.pcname
-      targetPayIdentifier = v.identifier
-      targetPayNet = v.net
-      targetPayReason = v.reason
-      targetPayAmmount = v.ammount
-      targetPayMaturity = v.maturity
-      targetPayStatus =  v.status
-
-      if Config.Framework ~= 'QB' then
-        for _, playerIdPay in ipairs(GetPlayers()) do
-          xPlayerPay = ESX.GetPlayerFromId(playerIdPay)
-          print(xPlayerPay)
-          print(targetPayIdentifier)
-          if targetPayIdentifier == xPlayerPay.identifier then
-            transmitPay = true
-            break
-          end
-        end
-      else
-        for _, playerIdPay in ipairs(GetPlayers()) do
-          xPlayerPay = QBCore.Functions.GetIdentifier(playerIdPay)
-          if targetPayIdentifier == xPlayerPay.identifier then
-            transmitPay = true
-            break
-          end
-        end
-      end
-
-      if transmitPay then
-        --TriggerClientEvent('vpc:submitNewInvoice', targetPayIdentifier, targetPayPcId, targetPayIdentifier, targetPayNet, targetPayReason, targetPayAmmount, targetPayMaturity, targetPayStatus)
-        MySQL.Async.execute("UPDATE vpc_invoice SET status = ? WHERE id = ?", {'transmitted', targetPayId})
-        Citizen.Wait(10)
-      end
-    end
-  end
-
-end
-
-]]
